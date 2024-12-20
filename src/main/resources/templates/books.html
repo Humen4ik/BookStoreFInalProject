@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>All Books</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table th, table td {
+            padding: 10px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+        table th {
+            background-color: #f4f4f4;
+        }
+        table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        table tr:hover {
+            background-color: #f1f1f1;
+        }
+        .description {
+            font-style: italic;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Available Books</h1>
+    <div>
+        <form th:action="@{/books/search}">
+            <input name="query" type="search" placeholder="Search books you want..." aria-label="Search">
+        </form>
+    </div>
+    <table>
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Genre</th>
+            <th>Age Group</th>
+            <th>Price</th>
+            <th>Publication Year</th>
+            <th>Author</th>
+            <th>Number of Pages</th>
+            <th>Language</th>
+            <th>Description</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="book : ${books}">
+            <td th:text="${book.name}"></td>
+            <td th:text="${book.genre}"></td>
+            <td th:text="${book.ageGroup}"></td>
+            <td th:text="${book.price}"></td>
+            <td th:text="${book.publicationDate}"></td>
+            <td th:text="${book.author}"></td>
+            <td th:text="${book.pages}"></td>
+            <td th:text="${book.language}"></td>
+            <td class="description" th:text="${book.description}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
