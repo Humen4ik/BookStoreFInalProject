@@ -5,22 +5,19 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
+import java.util.List;
+
+@Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
-public class BookItem {
+@Data
+public class Cart {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    Long id;
+    @OneToOne
+    private Client client;
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<BookItem> bookItems;
 
-    @ManyToOne
-    @JoinColumn(name = "order_id")
-    private Order order;
-
-    @ManyToOne
-    @JoinColumn(name = "book_id", nullable = false)
-    private Book book;
-
-    private Integer quantity;
 }

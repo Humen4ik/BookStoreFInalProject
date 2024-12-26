@@ -8,6 +8,7 @@
     <h1>Add a New Book</h1>
 
     <form th:action="@{/books/add}" method="post" th:object="${book}">
+        <p th:if="${#fields.hasErrors()}" th:text="pohunahu"></p>
         <div>
             <label for="name">Book Name:</label>
             <input type="text" id="name" name="name" required />
@@ -71,8 +72,7 @@
             </select>
             <p th:if="${#fields.hasErrors('language')}" th:errors="*{language}"></p>
         </div>
-
-        <button type="submit">Add Book</button>
+        <button type="submit">Add a Book</button>
     </form>
 </body>
 </html>

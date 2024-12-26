@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <div class="container">
+        <table>
+            <thead>
+            <tr>
+                <th>Email</th>
+                <th>Name</th>
+                <th>Phone</th>
+                <th>BirthDate</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="employee : ${employees}">
+                <td th:text="${employee.email}"></td>
+                <td th:text="${employee.name}"></td>
+                <td th:text="${employee.phone}"></td>
+                <td th:text="${employee.birthDate}"></td>
+            </tr>
+            </tbody>
+        </table>
+        <form th:action="@{/profile/edit}" method="get">
+            <button type="submit">Edit Profile</button>
+        </form>
+    </div>
+</body>
+</html>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <div class="container">
+        <table>
+            <thead>
+            <tr>
+                <th>Email</th>
+                <th>Name</th>
+                <th>Balance</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="client : ${clients}">
+                <td th:text="${client.email}"></td>
+                <td th:text="${client.name}"></td>
+                <td th:text="${client.balance}"></td>
+            </tr>
+            </tbody>
+        </table>
+        <form th:action="@{/profile/edit}" method="get">
+            <button type="submit">Edit Profile</button>
+        </form>
+        <form th:action="@{/profile/delete}" method="get">
+            <button type="submit">Delete profile</button>
+        </form>
+    </div>
+</body>
+</html>

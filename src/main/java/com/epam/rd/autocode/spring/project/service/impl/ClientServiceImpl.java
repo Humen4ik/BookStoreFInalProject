@@ -6,9 +6,11 @@ import com.epam.rd.autocode.spring.project.model.Client;
 import com.epam.rd.autocode.spring.project.repo.ClientRepository;
 import com.epam.rd.autocode.spring.project.service.ClientService;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -35,23 +37,24 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public ClientDTO updateClientByEmail(String email, ClientDTO client) {
+    public ClientDTO updateClientByEmail(String email, ClientDTO clientDTO) {
         Client oldClient = clientRepository.getClientByEmail(email)
                 .orElseThrow(() -> new NotFoundException("Client not found"));
 
-        oldClient.setBalance(client.getBalance());
-        oldClient.setName(client.getName());
+        oldClient.setName(clientDTO.getName());
+        oldClient.setBalance(clientDTO.getBalance());
 
-        if (!email.equals(client.getEmail())) {
+        if (!email.equals(clientDTO.getEmail())) {
             throw new IllegalArgumentException("Email cannot be updated");
         }
 
-        if (client.getPassword() != null) {
-            oldClient.setPassword(client.getPassword());
+        if (clientDTO.getPassword() != null) {
+            oldClient.setPassword(clientDTO.getPassword());
         }
 
         Client savedClient = clientRepository.save(oldClient);
         return mapper.map(savedClient, ClientDTO.class);
+
     }
 
     @Override
@@ -63,6 +66,12 @@ public class ClientServiceImpl implements ClientService {
     public ClientDTO addClient(ClientDTO client) {
         Client newClient = mapper.map(client, Client.class);
         return mapper.map(clientRepository.save(newClient), ClientDTO.class);
+    }
+
+    public Client getAuthenticatedClient() {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        return clientRepository.getClientByEmail(email)
+                .orElseThrow(() -> new IllegalStateException("Client not found"));
     }
 
 }

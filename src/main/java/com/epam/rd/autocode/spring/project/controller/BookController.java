@@ -1,10 +1,8 @@
 package com.epam.rd.autocode.spring.project.controller;
 
 import com.epam.rd.autocode.spring.project.dto.BookDTO;
-import com.epam.rd.autocode.spring.project.model.Book;
 import com.epam.rd.autocode.spring.project.service.BookService;
 import jakarta.validation.Valid;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -44,10 +42,16 @@ public class BookController {
         return "books";
     }
 
+//    @GetMapping("/edit")
+//    public String editBook(@ModelAttribute(name = "bookName") String name, Model model) {
+//        BookDTO bookDTO = bookService.getBookByName(name);
+//        model.addAttribute("book", bookDTO);
+//        return "book-edit";
+//    }
+
     @GetMapping("/{name}/edit")
     public String editBook(@PathVariable String name, Model model) {
-        BookDTO bookDTO = bookService.getBookByName(name);
-        model.addAttribute("book", bookDTO);
+        model.addAttribute("book", bookService.getBookByName(name));
         return "book-edit";
     }
 
@@ -79,7 +83,7 @@ public class BookController {
 
     @PostMapping("/add")
     public String addBook(
-            @Valid @ModelAttribute BookDTO book,
+            @Valid @ModelAttribute(name = "book") BookDTO book,
             BindingResult result,
             Model model
     ) {

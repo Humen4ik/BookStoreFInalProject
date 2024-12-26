@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Profile Edit</title>
+    </head>
+    <body>
+        <div class="container">
+            <h1>Edit Your Profile</h1>
+            <form th:action="@{/profile/edit/{email}/client(email=${client.email})}" th:object="${client}" method=post>
+                <div>
+                    <label for="name">Name:</label>
+                    <input type="text" name="name" id="name" required>
+                    <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></p>
+                </div>
+                <div>
+                    <label for="password">Password:</label>
+                    <input type="password" name="password" id="password" required>
+                    <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></p>
+                </div>
+                <div>
+                    <label for="balance">Balance:</label>
+                    <input type="number" name="balance" id="balance">
+                    <p th:if="${#fields.hasErrors('balance')}" th:errors="*{balance}"></p>
+                </div>
+                <button type="submit">Edit Profile</button>
+            </form>
+        </div>
+    </body>
+</html>

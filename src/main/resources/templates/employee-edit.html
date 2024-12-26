@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Title</title>
+    </head>
+    <body>
+    <div class="container">
+        <h1>Edit Your Profile</h1>
+        <form th:action="@{/profile/edit/{email}/employee(email=${employee.email})}" th:object="${employee}" method=post>
+            <div>
+                <label for="name">Name:</label>
+                <input type="text" name="name" id="name" required>
+                <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></p>
+            </div>
+            <div>
+                <label for="password">Password:</label>
+                <input type="password" name="password" id="password" required>
+                <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></p>
+            </div>
+            <div>
+                <label for="phone">Phone:</label>
+                <input type="tel" name="phone" id="phone" required>
+                <p th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}"></p>
+            </div>
+            <div>
+                <label for="birthDate">BirthDate:</label>
+                <input type="date" name="birthDate" id="birthDate" required>
+                <p th:if="${#fields.hasErrors('birthDate')}" th:errors="*{birthDate}"></p>
+            </div>
+            <button type="submit">Edit Profile</button>
+        </form>
+    </div>
+    </body>
+</html>

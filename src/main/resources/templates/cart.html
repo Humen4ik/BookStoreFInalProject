@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cart Details</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .cart {
+            border: 1px solid #ccc;
+            padding: 15px;
+            margin-top: 10px;
+            border-radius: 5px;
+        }
+        .no-items {
+            color: #888;
+            font-size: 18px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+        .action-buttons {
+            margin-top: 20px;
+        }
+        button {
+            padding: 10px 15px;
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        .delete-btn {
+            background-color: #dc3545;
+        }
+        .delete-btn:hover {
+            background-color: #c82333;
+        }
+    </style>
+</head>
+<body>
+<div th:if="${cart.bookItems.isEmpty()}" class="no-items">
+    <p>Your cart is empty. Add some books to continue!</p>
+</div>
+<div th:if="${!cart.bookItems.isEmpty()}" class="cart">
+    <h1>Cart Details</h1>
+    <p><strong>Client Email:</strong> <span th:text="${cart.clientEmail}"></span></p>
+
+    <h3>Book Items</h3>
+    <table>
+        <thead>
+        <tr>
+            <th>Book Name</th>
+            <th>Quantity</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="bookItem, iterStat : ${cart.bookItems}">
+            <td th:text="${bookItem.bookName}"></td>
+            <td th:text="${bookItem.quantity}"></td>
+            <td>
+                <button
+                        class="delete-btn"
+                        th:attr="data-book-name=${bookItem.bookName}"
+                        onclick="deleteBook(this)">
+                    Delete
+                </button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div class="action-buttons">
+        <button data-client-email-th="${cart.clientEmail}" onclick="confirmOrder(this)">Confirm Order</button>
+    </div>
+</div>
+
+<script>
+    function confirmOrder(button) {
+        if (confirm("Are you sure you want to confirm this order?")) {
+            fetch(`/cart/confirm`, {
+                method: 'POST'
+            })
+                .then(response => {
+                    if (response.ok) {
+                        return response.json(); // Parse the JSON response
+                    } else {
+                        throw new Error("Failed to confirm order.");
+                    }
+                })
+                .then(order => {
+                    alert("Order confirmed successfully!\nOrder ID: " + order.id);
+                    location.reload();
+                })
+                .catch(error => {
+                    alert(error.message);
+                });
+        }
+    }
+
+    function deleteBook(button) {
+        const bookName = button.getAttribute('data-book-name');
+        if (!bookName) {
+            alert("Unable to find the book name. Please try again.");
+            return;
+        }
+
+        if (confirm(`Are you sure you want to remove "${bookName}" from the cart?`)) {
+            fetch(`/cart/delete`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ bookName })
+            })
+                .then(response => {
+                    if (response.ok) {
+                        alert(`"${bookName}" has been removed from your cart.`);
+                        location.reload();
+                    } else {
+                        throw new Error(`Failed to remove "${bookName}" from the cart.`);
+                    }
+                })
+                .catch(error => {
+                    alert(error.message);
+                });
+        }
+    }
+
+</script>
+</body>
+</html>
